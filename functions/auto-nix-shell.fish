@@ -31,7 +31,6 @@ function exit-nix-shell
     set_color reset
     auto-nix-shell-log "Exiting nix-shell..."
     pwd > /tmp/nix-pwd
-    touch /tmp/nix-pwd
     exit
 end
 

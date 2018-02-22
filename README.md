@@ -16,29 +16,21 @@ fisher chrismwendt/auto-nix-shell
 Then add this to your `~/.config/fish/config.fish`:
 
 ```fish
-. ~/.config/fish/functions/auto-nix-shell.fish
+if test -e ~/.config/fish/functions/auto-nix-shell.fish
+    . ~/.config/fish/functions/auto-nix-shell.fish
+end
 ```
 
 ## Install for bash shell
 
-Get [bash-preexec](https://github.com/rcaloras/bash-preexec#quick-start) then add this to your `~/.bashrc`:
+- Clone this repo
+- Download [bash-preexec](https://github.com/rcaloras/bash-preexec#quick-start)
+- Add this to your `~/.bashrc`:
 
 ```bash
-autonixshell() {
-  if test -e default.nix -a -z "$IN_NIX_SHELL"; then
-    echo "⤓ Entering nix-shell..."
-    nix-shell --run "bash"
-    cd $(cat /tmp/nix-pwd)
-  elif test ! -e default.nix -a -n "$IN_NIX_SHELL"; then
-    echo "↥ Exiting nix-shell..."
-    pwd > /tmp/nix-pwd
-    exit
-  fi
-}
-
-source ~/.bash-preexec.sh
-preexec() { autonixshell }
-precmd() { autonixshell }
+if [ -e ~/auto-nix-shell/auto-nix-shell.sh ]; then
+  . ~/auto-nix-shell/auto-nix-shell.sh
+fi
 ```
 
 ## Usage

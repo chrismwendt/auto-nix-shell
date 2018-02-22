@@ -9,8 +9,7 @@ function enter-nix-shell
     set -x DEFAULT_NIX_SHASUM (shasum default.nix)
     auto-nix-shell-log "Entering nix-shell..."
     if test -e /tmp/nix-cmd
-        set -l cmd (cat /tmp/nix-cmd)
-        nix-shell --run "fish -c "(string escape (cat /tmp/nix-cmd))" ; fish"
+        nix-shell --run "fish /tmp/nix-cmd ; fish"
         rm /tmp/nix-cmd
     else
         nix-shell --run "fish"

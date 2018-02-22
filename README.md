@@ -41,6 +41,10 @@ preexec() { autonixshell }
 precmd() { autonixshell }
 ```
 
+## TODO
+
+- Re-run `nix-shell` if `default.nix` changed (e.g. after `git pull`)
+
 ## Usage
 
 `cd` into a directory that contains `default.nix` and auto-nix-shell will enter a nix-shell for you.

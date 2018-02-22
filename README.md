@@ -13,6 +13,12 @@ With [fisherman]
 fisher chrismwendt/auto-nix-shell
 ```
 
+Then add this to your `~/.config/fish/config.fish`:
+
+```fish
+. ~/.config/fish/functions/auto-nix-shell.fish
+```
+
 ## Usage
 
 `cd` into a directory that contains `default.nix` and auto-nix-shell will enter a nix-shell for you.

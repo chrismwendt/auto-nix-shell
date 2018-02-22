@@ -5,7 +5,7 @@
 
 enters/exits nix-shell automatically
 
-## Install
+## Install for fish shell
 
 With [fisherman]
 
@@ -17,6 +17,28 @@ Then add this to your `~/.config/fish/config.fish`:
 
 ```fish
 . ~/.config/fish/functions/auto-nix-shell.fish
+```
+
+## Install for bash shell
+
+Get [bash-preexec](https://github.com/rcaloras/bash-preexec#quick-start) then add this to your `~/.bashrc`:
+
+```bash
+autonixshell() {
+  if test -e default.nix -a -z "$IN_NIX_SHELL"; then
+    echo "⤓ Entering nix-shell..."
+    nix-shell --run "bash"
+    cd $(cat /tmp/nix-pwd)
+  elif test ! -e default.nix -a -n "$IN_NIX_SHELL"; then
+    echo "↥ Exiting nix-shell..."
+    pwd > /tmp/nix-pwd
+    exit
+  fi
+}
+
+source ~/.bash-preexec.sh
+preexec() { autonixshell }
+precmd() { autonixshell }
 ```
 
 ## Usage

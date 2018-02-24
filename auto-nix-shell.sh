@@ -1,3 +1,5 @@
+#!/bin/bash
+
 auto-nix-shell-log() {
     echo "$@"
 }

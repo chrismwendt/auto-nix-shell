@@ -8,9 +8,9 @@ function enter-nix-shell() {
   auto-nix-shell-log "-> Entering nix-shell..."
   export DEFAULT_NIX_SHASUM="$(shasum default.nix)"
   if [ -e /tmp/nix-cmd ]; then
-    nix-shell --run "bash /tmp/nix-cmd ; rm /tmp/nix-cmd ; bash"
+    nix-shell --run "$SHELL /tmp/nix-cmd ; rm /tmp/nix-cmd ; $SHELL"
   else
-    nix-shell --run "bash"
+    nix-shell --run "$SHELL"
   fi
 
   AUTO_NIX_SHELL_EXIT_CODE=$?

@@ -5,7 +5,7 @@ auto-nix-shell-log() {
 }
 
 function enter-nix-shell() {
-  auto-nix-shell-log "⤓ Entering nix-shell..."
+  auto-nix-shell-log "-> Entering nix-shell..."
   export DEFAULT_NIX_SHASUM="$(shasum default.nix)"
   if [ -e /tmp/nix-cmd ]; then
     nix-shell --run "bash /tmp/nix-cmd ; rm /tmp/nix-cmd ; bash"
@@ -29,7 +29,7 @@ function enter-nix-shell() {
 }
 
 exit-nix-shell() {
-  auto-nix-shell-log "↥ Exiting nix-shell..."
+  auto-nix-shell-log "<- Exiting nix-shell..."
   pwd > /tmp/nix-pwd
   exit
 }
@@ -46,7 +46,7 @@ auto-nix-shell() {
   elif [ -e default.nix -a -n "$IN_NIX_SHELL" ]; then
     hash="$(shasum default.nix)"
     if [ "$hash" != "$DEFAULT_NIX_SHASUM" ]; then
-      auto-nix-shell-log "↻ Reloading nix-shell..."
+      auto-nix-shell-log "* Reloading nix-shell..."
       # Save the command for reentry
       echo "$@" > /tmp/nix-cmd
       exit-nix-shell

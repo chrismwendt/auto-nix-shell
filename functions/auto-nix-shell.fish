@@ -1,13 +1,17 @@
-function auto-nix-shell-log
-    echo $argv
+function auto-nix-shell-message
+    if test "$auto_nix_shell_message_enabled" != "false"
+        set_color $argv[1]
+        echo -n "$argv[2] "
+        set_color reset
+        echo $argv[3]
+    end
 end
 
 function enter-nix-shell
-    set_color green
-    auto-nix-shell-log -n "⤓ "
-    set_color reset
+    auto-nix-shell-message blue "->" "Entering nix-shell..."
+
     set -gx DEFAULT_NIX_SHASUM (shasum default.nix)
-    auto-nix-shell-log "Entering nix-shell..."
+
     if test -e /tmp/nix-cmd
         nix-shell --run "fish /tmp/nix-cmd ; rm /tmp/nix-cmd ; fish"
     else
@@ -29,10 +33,8 @@ function enter-nix-shell
 end
 
 function exit-nix-shell
-    set_color red
-    auto-nix-shell-log -n "↥ "
-    set_color reset
-    auto-nix-shell-log "Exiting nix-shell..."
+    auto-nix-shell-message red "<-" "Exiting nix-shell..."
+
     pwd > /tmp/nix-pwd
     exit
 end
@@ -49,12 +51,11 @@ function auto-nix-shell -d "enters/exits nix-shell automatically"
     else if test -e default.nix -a -n "$IN_NIX_SHELL"
         set -l hash (shasum default.nix)
         if test "$hash" != "$DEFAULT_NIX_SHASUM"
-            set_color blue
-            auto-nix-shell-log -n "↻ "
-            set_color reset
+            auto-nix-shell-message green "*" "Reloading nix-shell..."
+
             # Save the command for reentry
             echo $argv > /tmp/nix-cmd
-            auto-nix-shell-log "Reloading nix-shell..."
+
             exit-nix-shell
         end
     else

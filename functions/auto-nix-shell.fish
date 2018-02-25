@@ -6,21 +6,25 @@ function enter-nix-shell
     set_color green
     auto-nix-shell-log -n "⤓ "
     set_color reset
-    set -x DEFAULT_NIX_SHASUM (shasum default.nix)
+    set -gx DEFAULT_NIX_SHASUM (shasum default.nix)
     auto-nix-shell-log "Entering nix-shell..."
     if test -e /tmp/nix-cmd
-        nix-shell --run "fish /tmp/nix-cmd ; fish"
-        rm /tmp/nix-cmd
+        nix-shell --run "fish /tmp/nix-cmd ; rm /tmp/nix-cmd ; fish"
     else
         nix-shell --run "fish"
     end
+
+    set -g AUTO_NIX_SHELL_EXIT_CODE $status
+
     if test -e /tmp/nix-pwd
         # The user left nix-shell by `cd`ing out of the directory
         cd (cat /tmp/nix-pwd)
         rm /tmp/nix-pwd
-    else
+    else if test "$AUTO_NIX_SHELL_EXIT_CODE" = "0"
         # Exit this shell too because the user exited with Ctrl+D
         exit
+    else
+        # Loading default.nix failed
     end
 end
 
@@ -34,7 +38,9 @@ function exit-nix-shell
 end
 
 function auto-nix-shell -d "enters/exits nix-shell automatically"
-    if test -e default.nix -a -z "$IN_NIX_SHELL"
+    set -l hash (shasum default.nix 2>&1)
+
+    if test -e default.nix -a -z "$IN_NIX_SHELL" -a \( "$hash" != "$DEFAULT_NIX_SHASUM" -o "$AUTO_NIX_SHELL_EXIT_CODE" = 0 \)
         enter-nix-shell
         # Loop in case default.nix was changed
         auto-nix-shell
@@ -48,7 +54,7 @@ function auto-nix-shell -d "enters/exits nix-shell automatically"
             set_color reset
             # Save the command for reentry
             echo $argv > /tmp/nix-cmd
-            auto-nix-shell-log "Reloading nix-shell because default.nix changed..."
+            auto-nix-shell-log "Reloading nix-shell..."
             exit-nix-shell
         end
     else

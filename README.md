@@ -1,8 +1,5 @@
 # auto-nix-shell
 
-[![Build Status][travis-badge]][travis-link]
-[![Slack Room][slack-badge]][slack-link]
-
 auto-nix-shell enters or exits nix-shell automatically when you cd into or out of a directory that contains a `default.nix` file. It reloads nix-shell for the next command if `default.nix` was changed, so `git pull` works seamlessly. It does not handle the case where a script modifies `default.nix` then runs commands dependent on the new version.
 
 ## Install for fish shell

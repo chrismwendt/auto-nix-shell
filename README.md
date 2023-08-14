@@ -1,3 +1,5 @@
+⚠️ Use https://github.com/nix-community/nix-direnv instead! This repo is old, unmaintained, doesn't support flakes, etc.
+
 # auto-nix-shell
 
 auto-nix-shell enters or exits nix-shell automatically when you cd into or out of a directory that contains a `default.nix` file. It reloads nix-shell for the next command if `default.nix` was changed, so `git pull` works seamlessly. It does not handle the case where a script modifies `default.nix` then runs commands dependent on the new version.
